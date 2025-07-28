@@ -1,0 +1,88 @@
+spring:
+  application:
+    name: notification-service
+  
+  # Kafka Configuration
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: notification-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "com.krainet.common.event"
+        spring.json.type.mapping: "userEvent:com.krainet.common.event.UserEvent"
+    listener:
+      ack-mode: MANUAL_IMMEDIATE
+      missing-topics-fatal: false
+  
+  # Email Configuration
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USERNAME:}
+    password: ${EMAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        transport:
+          protocol: smtp
+          rset: true
+    test-connection: true
+
+# Kafka Topic Configuration
+kafka:
+  topic:
+    user-events: user-events
+
+# Application Properties
+app:
+  email:
+    from: no-reply@krainet.com
+    admin-email: admin@krainet.com
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    com.krainet: DEBUG
+    org.springframework.kafka: INFO
+    org.apache.kafka: INFO
+
+# Server Configuration
+server:
+  port: 8081
+
+# Actuator Endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+      group:
+        liveness:
+          include: livenessState,ping
+        readiness:
+          include: readinessState,ping,kafka
+
+# Health Check Configuration
+management:
+  health:
+    kafka:
+      enabled: true
+    mail:
+      enabled: true
+    db:
+      enabled: true
+    diskSpace:
+      enabled: true
+    ping:
+      enabled: true

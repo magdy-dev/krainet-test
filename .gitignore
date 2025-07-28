@@ -1,0 +1,64 @@
+# Project exclude paths
+/krainet-common/target/
+
+# Environment variables
+.env
+!.env.example
+
+# IDE specific files
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# Build directories
+target/
+*/target/
+build/
+*/build/
+
+# Logs
+logs/
+*.log
+
+# Local development
+.DS_Store
+Thumbs.db
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Application Properties
+*/src/main/resources/application-*.properties
+!*/src/main/resources/application.properties
+!*/src/main/resources/application-example.properties
+
+# Docker
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Secrets
+**/secrets.*
+**/credentials.*
+**/config.*
+**/application-*.yml
+!**/application-example.yml
+
+# System Files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,66 @@
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/auth_db
+    username: postgres
+    password: 123456
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.trusted.packages: "com.krainet.common.event"
+        spring.json.type.mapping: "userEvent:com.krainet.common.event.UserEvent"
+  task:
+    execution:
+      thread-name-prefix: async-event-publisher-
+      pool:
+        core-size: 5
+        max-size: 10
+        queue-capacity: 100
+
+# Kafka topic configuration
+kafka:
+  topic:
+    user-events: user-events
+
+app:
+  jwt:
+    secret: your-jwt-secret-key-32-characters-long-1234567890
+    expiration-ms: 86400000 # 24 hours
+    issuer: krainet-auth-service
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    com.krainet: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
